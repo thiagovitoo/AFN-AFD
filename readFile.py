@@ -1,3 +1,4 @@
+
 def read_file(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -61,33 +62,38 @@ def read_file(file_path):
     estados_finais.append(estado_final_temp)  # Adicionar o último estado final
     i += 1  # Ignorar '}'
 
-
+    
     # Ignorar a string "Prog"
     transicoes = {}
     for line in lines[2:]:
         line = line.strip()
         if line:
             estado, transicao = line.split(')=')
-            estado = estado[1:]
-            transicoes[estado] = transicao[1:-1].split(',')
+            estado, letra  = estado[1:].split(',')  # Converter 'q1, i' para ['q1', 'i']
+            transicoes[estado, letra] = transicao[1:-1].split(',')
+    
+    return estados, alfabeto, estado_inicial, estados_finais, transicoes
 
-    return {
-        "ESTADOS": estados,
-        "ALFABETO": alfabeto,
-        "ESTADO_INICIAL": estado_inicial,
-        "ESTADOS_FINAIS": estados_finais,
-        "TRANSICOES": transicoes
-    }
+
+def carregar_palavras(caminho_arquivo):
+    # Carregar palavras do arquivo e retornar como uma lista
+    with open(caminho_arquivo, 'r') as arquivo:
+        conteudo = arquivo.read().strip()
+        palavras = conteudo.split(',')
+        return palavras
+
 
 if __name__ == '__main__':
-    automato = read_file('AFN.txt')
-    print("ESTADOS:", automato["ESTADOS"])
-    print("ALFABETO:", automato["ALFABETO"])
-    print("ESTADO_INICIAL:", automato["ESTADO_INICIAL"])
-    print("ESTADOS_FINAIS:", automato["ESTADOS_FINAIS"])
-    print("TRANSICOES:", automato["TRANSICOES"])
+    estados, alfabeto, estado_inicial, estados_finais, transicoes = read_file('Entrada/AFN.txt')
 
-    
+    print("ESTADOS:", estados)
+    print("ALFABETO:", alfabeto)
+    print("ESTADO_INICIAL:", estado_inicial)
+    print("ESTADOS_FINAIS:", estados_finais)
+    print("TRANSICOES:", transicoes)
+
+    palavras = carregar_palavras("Entrada/palavras.txt")
+
 '''
     Ponteiro da string ignora AUTÔMATO=({
 
